@@ -1,0 +1,82 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+import {
+  FaTachometerAlt,
+  FaBox,
+  FaClipboardList,
+  FaStar,
+  FaCog,
+} from "react-icons/fa";
+
+function Sidebar() {
+  return (
+    <aside className="w-64 min-h-screen mt-[60px] bg-gray-100 text-black flex flex-col p-4 space-y-4">
+      <h1 className="text-2xl font-semibold">Admin Panel</h1>
+
+      <nav className="flex flex-col space-y-3">
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            `flex items-center px-3 py-2 rounded ${
+              isActive
+                ? "bg-black text-white"
+                : "hover:bg-black hover:text-white"
+            }`
+          }
+        >
+          <FaTachometerAlt className="mr-3" /> Dashboard
+        </NavLink>
+        <NavLink
+          to="/products"
+          className={({ isActive }) =>
+            `flex items-center px-3 py-2 rounded ${
+              isActive
+                ? "bg-black text-white"
+                : "hover:bg-black hover:text-white"
+            }`
+          }
+        >
+          <FaBox className="mr-3" /> Product
+        </NavLink>
+        <NavLink
+          to="/orders"
+          className={({ isActive }) =>
+            `flex items-center px-3 py-2 rounded ${
+              isActive
+                ? "bg-black text-white"
+                : "hover:bg-black hover:text-white"
+            }`
+          }
+        >
+          <FaClipboardList className="mr-3" /> Orders
+        </NavLink>
+        <NavLink
+          to="/testimonials"
+          className={({ isActive }) =>
+            `flex items-center px-3 py-2 rounded ${
+              isActive
+                ? "bg-black text-white"
+                : "hover:bg-black hover:text-white"
+            }`
+          }
+        >
+          <FaStar className="mr-3" /> Testimonials
+        </NavLink>
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `flex items-center px-3 py-2 rounded ${
+              isActive
+                ? "bg-black text-white"
+                : "hover:bg-black hover:text-white"
+            }`
+          }
+        >
+          <FaCog className="mr-3" /> Settings
+        </NavLink>
+      </nav>
+    </aside>
+  );
+}
+
+export default Sidebar;
