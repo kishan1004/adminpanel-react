@@ -1,6 +1,11 @@
 import "./App.css";
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
 import Dashboard from "./components/Dashboard";
@@ -21,10 +26,11 @@ function App() {
     <Router>
       <div className="App">
         <Topbar toggleSidebar={toggleSidebar} />
-        <div className="flex">
-          {isSidebarOpen && <Sidebar />}
-          <div className="flex-grow p-4">
+        <div className="flex flex-col md:flex-row">
+          {isSidebarOpen && <Sidebar className="hidden md:block" />}
+          <div className="flex-grow p-4 md:pl-8 md:pt-4">
             <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/products" element={<ProductList />} />
               <Route path="/upload" element={<ProductUpload />} />
