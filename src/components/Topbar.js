@@ -46,7 +46,7 @@ const recentOrders = [
   },
 ];
 
-const Topbar = ({ toggleSidebar }) => {
+const Topbar = ({ toggleSidebar, onLogout }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
 
@@ -65,7 +65,6 @@ const Topbar = ({ toggleSidebar }) => {
       order.paymentStatus === "Success" ? "online payment" : "COD";
     return `${order.customer} ordered ${order.count} of product ID ${order.productId} through ${paymentMethod}`;
   };
-
   return (
     <div className="w-full fixed h-[60px] bg-gray-100 flex items-center justify-between p-2 sm:p-4">
       <div className="flex items-center">
@@ -119,15 +118,15 @@ const Topbar = ({ toggleSidebar }) => {
           {isAccountOpen && (
             <div className="absolute right-0 mt-2 w-32 sm:w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
               <ul>
-                <li
-                  className="hover:bg-gray-100 px-4 py-2 cursor-pointer"
-                  onClick={() => setIsAccountOpen(false)}
-                >
+                <li className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                   My Account
                 </li>
                 <li
                   className="hover:bg-gray-100 px-4 py-2 cursor-pointer"
-                  onClick={() => setIsAccountOpen(false)}
+                  onClick={() => {
+                    setIsAccountOpen(false);
+                    onLogout(); // Call the logout function
+                  }}
                 >
                   Logout
                 </li>
