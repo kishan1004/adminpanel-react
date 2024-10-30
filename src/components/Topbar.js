@@ -72,7 +72,7 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
           onClick={toggleSidebar}
           className="text-3xl cursor-pointer sm:mr-4"
         />
-        <img src={Logo} alt="Logo" className="hidden sm:block w-[180px]" />
+        <img src={Logo} alt="Logo" className="w-[180px]" />
       </div>
       <div className="flex items-center gap-4 sm:gap-10 relative">
         <div className="relative">

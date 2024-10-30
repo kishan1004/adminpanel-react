@@ -81,10 +81,7 @@ const Testimonials = () => {
       <h1 className="text-2xl font-bold mb-6">Customer Testimonials</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {displayedTestimonials.map((testimonial) => (
-          <div
-            key={testimonial.id}
-            className="bg-white p-4 border rounded shadow-md transition-transform transform hover:scale-105"
-          >
+          <div key={testimonial.id} className="bg-white p-4 border rounded">
             <h3 className="font-semibold">{testimonial.customerName}</h3>
             <p className="text-gray-600">{testimonial.review}</p>
           </div>

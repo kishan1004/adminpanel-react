@@ -150,14 +150,14 @@ const Dashboard = () => {
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
       {/* Time Range Selector */}
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
         {["lastDay", "lastWeek", "lastMonth", "lastYear"].map((range) => (
           <button
             key={range}
             onClick={() => setTimeRange(range)}
-            className={`py-1 px-4 rounded ${
+            className={`py-2 px-4 rounded ${
               timeRange === range ? "bg-black text-white" : "bg-[#D9D9D9]"
-            }`}
+            } transition duration-200 ease-in-out transform hover:scale-105`} // Added hover effect
           >
             {range.replace("last", "Last ")}
           </button>
@@ -213,8 +213,9 @@ const Dashboard = () => {
       </div>
 
       {/* Chart Section */}
-      <div className="bg-white grid grid-cols-2 p-5 my-10 rounded-lg shadow-md">
-        <div>
+      <div className="bg-white grid lg:grid-cols-2 grid-cols-1 p-5 my-10 rounded-lg shadow-md">
+        <div className="mb-5 lg:mb-0 hidden md:block">
+          {/* Added margin for spacing on smaller screens */}
           <h2 className="text-lg font-semibold mb-4">Statistics Overview</h2>
           <Line
             data={chartData}
@@ -248,8 +249,9 @@ const Dashboard = () => {
           />
         </div>
 
-        <div>
-          <h2 className="text-lg font-semibold mb-4 mt-10">
+        <div className=" lg:w-[400px]">
+          <h2 className="text-lg font-semibold mb-4 mt-5 lg:mt-10">
+            {/* Adjusted margin for mobile responsiveness */}
             Order Status Distribution
           </h2>
           <Pie

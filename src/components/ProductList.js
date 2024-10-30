@@ -84,12 +84,12 @@ const ProductList = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-4 mb-6">
+      <div className="mb-6 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
         <select
           name="category"
           value={selectedCategory}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded w-full md:w-auto" // Full width on small screens
         >
           <option value="">All Categories</option>
           {productCategories.map((category) => (
@@ -98,21 +98,23 @@ const ProductList = () => {
             </option>
           ))}
         </select>
+
         <select
           name="price"
           value={selectedPrice}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded w-full md:w-auto" // Full width on small screens
         >
           <option value="">All Prices</option>
           <option value="<50">Under $50</option>
           <option value=">=50">$50 and above</option>
         </select>
+
         <select
           name="rating"
           value={selectedRating}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded w-full md:w-auto" // Full width on small screens
         >
           <option value="">All Ratings</option>
           <option value="1">1 and above</option>

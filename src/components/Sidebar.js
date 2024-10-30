@@ -1,3 +1,4 @@
+// Sidebar.js
 import React from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -8,7 +9,7 @@ import {
   FaCog,
 } from "react-icons/fa";
 
-function Sidebar() {
+function Sidebar({ toggleSidebar }) {
   return (
     <aside className="w-64 min-h-screen mt-[60px] bg-gray-100 text-black flex flex-col p-4 space-y-4">
       <h1 className="text-2xl font-semibold">Admin Panel</h1>
@@ -23,6 +24,7 @@ function Sidebar() {
                 : "hover:bg-black hover:text-white"
             }`
           }
+          onClick={toggleSidebar} // Close sidebar on link click
         >
           <FaTachometerAlt className="mr-3" /> Dashboard
         </NavLink>
@@ -35,6 +37,7 @@ function Sidebar() {
                 : "hover:bg-black hover:text-white"
             }`
           }
+          onClick={toggleSidebar} // Close sidebar on link click
         >
           <FaBox className="mr-3" /> Product
         </NavLink>
@@ -47,6 +50,7 @@ function Sidebar() {
                 : "hover:bg-black hover:text-white"
             }`
           }
+          onClick={toggleSidebar} // Close sidebar on link click
         >
           <FaClipboardList className="mr-3" /> Orders
         </NavLink>
@@ -59,6 +63,7 @@ function Sidebar() {
                 : "hover:bg-black hover:text-white"
             }`
           }
+          onClick={toggleSidebar} // Close sidebar on link click
         >
           <FaStar className="mr-3" /> Testimonials
         </NavLink>
@@ -71,6 +76,7 @@ function Sidebar() {
                 : "hover:bg-black hover:text-white"
             }`
           }
+          onClick={toggleSidebar} // Close sidebar on link click
         >
           <FaCog className="mr-3" /> Settings
         </NavLink>

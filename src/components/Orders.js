@@ -126,7 +126,7 @@ const Orders = () => {
       <h1 className="text-2xl font-bold mb-6">Orders</h1>
 
       {/* Filters */}
-      <div className="flex gap-4 mb-6">
+      <div className="mb-6 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
         <select
           value={selectedPaymentStatus}
           onChange={(e) => setSelectedPaymentStatus(e.target.value)}

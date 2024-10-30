@@ -1,3 +1,4 @@
+// App.js
 import "./App.css";
 import React, { useState } from "react";
 import {
@@ -40,8 +41,8 @@ function App() {
         ) : (
           <>
             <Topbar toggleSidebar={toggleSidebar} onLogout={handleLogout} />
-            <div className="flex flex-col md:flex-row">
-              {isSidebarOpen && <Sidebar className="hidden md:block" />}
+            <div className="flex flex-col lg:flex-row">
+              {isSidebarOpen && <Sidebar toggleSidebar={toggleSidebar} />}
               <div className="flex-grow">
                 <Routes>
                   <Route path="/" element={<Navigate to="/dashboard" />} />
