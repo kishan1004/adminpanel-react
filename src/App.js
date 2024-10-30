@@ -28,7 +28,7 @@ function App() {
         <Topbar toggleSidebar={toggleSidebar} />
         <div className="flex flex-col md:flex-row">
           {isSidebarOpen && <Sidebar className="hidden md:block" />}
-          <div className="flex-grow p-4 md:pl-8 md:pt-4">
+          <div className="flex-grow">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
