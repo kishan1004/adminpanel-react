@@ -157,7 +157,7 @@ const Dashboard = () => {
             onClick={() => setTimeRange(range)}
             className={`py-2 px-4 rounded ${
               timeRange === range ? "bg-black text-white" : "bg-[#D9D9D9]"
-            } transition duration-200 ease-in-out transform hover:scale-105`} // Added hover effect
+            } `} // Added hover effect
           >
             {range.replace("last", "Last ")}
           </button>

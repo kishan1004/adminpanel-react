@@ -65,30 +65,33 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
       order.paymentStatus === "Success" ? "online payment" : "COD";
     return `${order.customer} ordered ${order.count} of product ID ${order.productId} through ${paymentMethod}`;
   };
+
   return (
     <div className="w-full fixed h-[60px] bg-gray-100 flex items-center justify-between p-2 sm:p-4">
       <div className="flex items-center">
         <GiHamburgerMenu
           onClick={toggleSidebar}
-          className="text-3xl cursor-pointer sm:mr-4"
+          className="text-2xl sm:text-3xl cursor-pointer sm:mr-4"
         />
-        <img src={Logo} alt="Logo" className="w-[180px]" />
+        <img src={Logo} alt="Logo" className="w-[120px] sm:w-[180px]" />
       </div>
-      <div className="flex items-center gap-4 sm:gap-10 relative">
+      <div className="flex items-center gap-3 sm:gap-10 relative">
         <div className="relative">
           <IoNotifications
-            className="text-2xl sm:text-3xl cursor-pointer"
+            className="text-xl sm:text-2xl cursor-pointer"
             onClick={toggleNotificationDropdown}
           />
           {recentOrders.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs sm:text-sm">
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-3 h-3 flex items-center justify-center text-xs">
               {recentOrders.length}
             </span>
           )}
           {isNotificationOpen && (
-            <div className="absolute right-0 mt-2 w-60 sm:w-72 bg-white border border-gray-200 rounded shadow-lg z-10">
+            <div className="absolute right-0 mt-2 w-[90vw] max-w-[250px] bg-white border border-gray-200 rounded shadow-lg z-50">
               <div className="p-2">
-                <h4 className="font-bold text-lg mb-2">Recent Orders</h4>
+                <h4 className="font-bold text-sm sm:text-lg mb-2">
+                  Recent Orders
+                </h4>
                 <ul>
                   {recentOrders.slice(0, 3).map((order) => (
                     <li
@@ -113,10 +116,11 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
             onClick={toggleAccountDropdown}
             className="focus:outline-none"
           >
-            <MdAccountCircle className="text-2xl sm:text-3xl" />
+            <MdAccountCircle className="text-xl sm:text-2xl" />
           </button>
           {isAccountOpen && (
-            <div className="absolute right-0 mt-2 w-32 sm:w-40 bg-white border border-gray-200 rounded shadow-lg z-10">
+            <div className="absolute right-0 mt-2 w-[90vw] max-w-[160px] bg-white border border-gray-200 rounded shadow-lg z-50">
+              {" "}
               <ul>
                 <li className="hover:bg-gray-100 px-4 py-2 cursor-pointer">
                   My Account
@@ -125,7 +129,7 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
                   className="hover:bg-gray-100 px-4 py-2 cursor-pointer"
                   onClick={() => {
                     setIsAccountOpen(false);
-                    onLogout(); // Call the logout function
+                    onLogout();
                   }}
                 >
                   Logout
