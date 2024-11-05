@@ -213,10 +213,11 @@ const Dashboard = () => {
       </div>
 
       {/* Chart Section */}
-      <div className="bg-white grid lg:grid-cols-2 grid-cols-1 p-5 my-10 rounded-lg shadow-md">
-        <div className="mb-5 lg:mb-0 hidden md:block">
-          {/* Added margin for spacing on smaller screens */}
-          <h2 className="text-lg font-semibold mb-4">Statistics Overview</h2>
+
+      <div className="mb-5 lg:mb-0 hidden md:block max-w-full p-4 bg-white shadow-md rounded-md my-4 ">
+        {/* Added margin for spacing on smaller screens */}
+        <h2 className="text-lg font-semibold mb-4">Statistics Overview</h2>
+        <div className="max-w-[800px] mx-auto">
           <Line
             data={chartData}
             options={{
@@ -248,75 +249,79 @@ const Dashboard = () => {
             }}
           />
         </div>
-
+      </div>
+      <div className="bg-white grid lg:grid-cols-2 grid-cols-1  p-5 my-10 rounded-lg shadow-md">
         <div>
-          <h2 className="text-lg font-semibold mb-4 mt-5 lg:mt-10">
+          <h2 className="text-lg font-semibold mb-4">
             {/* Adjusted margin for mobile responsiveness */}
             Order Status Distribution
           </h2>
-          <Pie
-            data={pieChartData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: "top",
+          <div className="max-w-[400px]">
+            <Pie
+              data={pieChartData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  title: {
+                    display: true,
+                    text: "Completed vs Pending Orders",
+                  },
                 },
-                title: {
-                  display: true,
-                  text: "Completed vs Pending Orders",
-                },
-              },
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-lg font-semibold mb-4">Traffic & Sales Overview</h2>
-
-        {/* Traffic Sources */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          {/* Organic Search */}
-          <div className="flex items-center p-4 bg-gray-100 rounded-lg shadow">
-            <FaSearch className="text-blue-500 text-3xl mr-4" />
-            <div>
-              <p className="text-gray-500">Organic Search</p>
-              <h3 className="text-2xl font-semibold">
-                {stats.trafficData.organicSearch}
-              </h3>
-            </div>
-          </div>
-
-          {/* Facebook */}
-          <div className="flex items-center p-4 bg-gray-100 rounded-lg shadow">
-            <FaFacebook className="text-blue-600 text-3xl mr-4" />
-            <div>
-              <p className="text-gray-500">Facebook</p>
-              <h3 className="text-2xl font-semibold">
-                {stats.trafficData.facebook}
-              </h3>
-            </div>
-          </div>
-
-          {/* Instagram */}
-          <div className="flex items-center p-4 bg-gray-100 rounded-lg shadow">
-            <FaInstagram className="text-pink-500 text-3xl mr-4" />
-            <div>
-              <p className="text-gray-500">Instagram</p>
-              <h3 className="text-2xl font-semibold">
-                {stats.trafficData.instagram}
-              </h3>
-            </div>
+              }}
+            />
           </div>
         </div>
-
-        {/* Daily Sales */}
-        <div className="p-4 bg-gray-100 rounded-lg shadow">
-          <h3 className="text-gray-500">Daily Sales</h3>
-          <h2 className="text-2xl font-semibold">
-            ${stats.trafficData.dailySales}
+        <div className="">
+          <h2 className="text-lg font-semibold mb-4">
+            Traffic & Sales Overview
           </h2>
+
+          {/* Traffic Sources */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+            {/* Organic Search */}
+            <div className="flex items-center p-4 bg-gray-100 rounded-lg shadow">
+              <FaSearch className="text-blue-500 text-3xl mr-4" />
+              <div>
+                <p className="text-gray-500">Organic Search</p>
+                <h3 className="text-2xl font-semibold">
+                  {stats.trafficData.organicSearch}
+                </h3>
+              </div>
+            </div>
+
+            {/* Facebook */}
+            <div className="flex items-center p-4 bg-gray-100 rounded-lg shadow">
+              <FaFacebook className="text-blue-600 text-3xl mr-4" />
+              <div>
+                <p className="text-gray-500">Facebook</p>
+                <h3 className="text-2xl font-semibold">
+                  {stats.trafficData.facebook}
+                </h3>
+              </div>
+            </div>
+
+            {/* Instagram */}
+            <div className="flex items-center p-4 bg-gray-100 rounded-lg shadow">
+              <FaInstagram className="text-pink-500 text-3xl mr-4" />
+              <div>
+                <p className="text-gray-500">Instagram</p>
+                <h3 className="text-2xl font-semibold">
+                  {stats.trafficData.instagram}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          {/* Daily Sales */}
+          <div className="p-4 bg-gray-100 rounded-lg shadow">
+            <h3 className="text-gray-500">Daily Sales</h3>
+            <h2 className="text-2xl font-semibold">
+              ${stats.trafficData.dailySales}
+            </h2>
+          </div>
         </div>
       </div>
     </div>

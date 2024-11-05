@@ -150,8 +150,8 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
             </span>
           )}
           {isNotificationOpen && (
-            <div className="fixed right-2 mt-2 w-[90vw] max-w-[250px] bg-white border border-gray-300 shadow-lg z-50 h-screen">
-              <div className="p-2">
+            <div className="fixed right-2 mt-2 w-[90vw]  max-w-[400px] bg-white border border-gray-300 shadow-lg z-50 h-[80vh] overflow-scroll">
+              <div className="p-4">
                 <h4 className="font-bold text-sm sm:text-lg mb-2">
                   Recent Orders
                 </h4>
@@ -159,7 +159,7 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
                   {recentOrders.map((order) => (
                     <li
                       key={order.id}
-                      className={`px-4 py-2 cursor-pointer border border-gray-300 ${
+                      className={`px-4 py-6 cursor-pointer border-b border-gray-300 ${
                         clickedOrderIds.includes(order.id)
                           ? "bg-gray-200"
                           : "hover:bg-gray-100"

@@ -55,10 +55,9 @@ const ProductUpload = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center bg-gray-100 mt-14">
-      <div className="p-8 rounded-lg w-full space-y-4">
-        <h1 className="text-3xl font-bold mb-6">Product Upload</h1>
-
+    <div className="min-h-screen w-full  bg-gray-100 mt-14 p-8">
+      <h1 className="text-3xl font-bold mb-6">Product Upload</h1>
+      <div className="rounded-lg w-full gap-5 grid grid-cols-1 md:grid-cols-2">
         {/* Input Fields */}
         <div>
           <label className="font-semibold">Product Name</label>
@@ -82,17 +81,7 @@ const ProductUpload = () => {
             placeholder="Enter product ID"
           />
         </div>
-        <div>
-          <label className="font-semibold">Description</label>
-          <textarea
-            name="description"
-            value={productData.description}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter product description"
-            rows="3"
-          />
-        </div>
+
         <div>
           <label className="font-semibold">Product Brand</label>
           <input
@@ -122,6 +111,59 @@ const ProductUpload = () => {
             ))}
           </select>
         </div>
+
+        <div>
+          <label className="font-semibold">Tag</label>
+          <input
+            type="text"
+            name="size"
+            value={productData.tag}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Enter product tag"
+          />
+        </div>
+
+        <div>
+          <label className="font-semibold">Collection</label>
+          <input
+            type="text"
+            name="size"
+            value={productData.collection}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Enter product collection"
+          />
+        </div>
+        <div>
+          <label className="font-semibold">Product Size</label>
+          <select
+            name="size"
+            value={productData.size}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+          >
+            <option value="">Select size</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="font-semibold">Stock Count</label>
+          <input
+            type="number"
+            name="stock"
+            value={productData.stock}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Enter stock count"
+          />
+        </div>
         <div>
           <label className="font-semibold">Product Price</label>
           <input
@@ -144,17 +186,7 @@ const ProductUpload = () => {
             placeholder="Enter offer price"
           />
         </div>
-        <div>
-          <label className="font-semibold">Stock Count</label>
-          <input
-            type="number"
-            name="stock"
-            value={productData.stock}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter stock count"
-          />
-        </div>
+
         <div>
           <label className="font-semibold">Product Rating (1-5)</label>
           <input
@@ -180,6 +212,7 @@ const ProductUpload = () => {
             placeholder="Enter product size"
           />
         </div>
+
         <div>
           <label className="font-semibold">Product Color</label>
           <div className="flex items-center">
@@ -209,83 +242,106 @@ const ProductUpload = () => {
             className="w-full px-4 py-2 border rounded"
           />
         </div>
-
-        {/* Buttons */}
-        <div className="flex justify-between mt-4">
-          <button
-            onClick={handleReview}
-            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-          >
-            Review
-          </button>
-          <button
-            onClick={handleUpload}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Upload
-          </button>
-        </div>
-
-        {/* Review Section */}
-        {reviewMode && (
-          <div className="mt-6 bg-gray-100 p-4 rounded">
-            <h2 className="text-xl font-bold mb-2">Review Product Details</h2>
-            <p>
-              <strong>Name:</strong> {productData.name}
-            </p>
-            <p>
-              <strong>ID:</strong> {productData.id}
-            </p>
-            <p>
-              <strong>Description:</strong> {productData.description}
-            </p>
-            <p>
-              <strong>Brand:</strong> {productData.brand}
-            </p>
-            <p>
-              <strong>Category:</strong> {productData.category}
-            </p>
-            <p>
-              <strong>Price:</strong> ${productData.price}
-            </p>
-            <p>
-              <strong>Offer Price:</strong> ${productData.offerPrice}
-            </p>
-            <p>
-              <strong>Stock:</strong> {productData.stock}
-            </p>
-            <p>
-              <strong>Rating:</strong> {productData.rating}
-            </p>
-            <p>
-              <strong>Size:</strong> {productData.size}
-            </p>
-            <p>
-              <strong>Color:</strong>{" "}
-              <span
-                style={{
-                  backgroundColor: productData.color,
-                  padding: "5px 10px",
-                  borderRadius: "5px",
-                  color: "#fff",
-                }}
-              >
-                {productData.color}
-              </span>
-            </p>
-            {imagePreview && (
-              <div>
-                <strong>Photo:</strong>
-                <img
-                  src={imagePreview}
-                  alt="Product Preview"
-                  className="mt-2 w-32 h-32 object-cover"
-                />
-              </div>
-            )}
-          </div>
-        )}
       </div>
+      <div>
+        <label className="font-semibold">Description</label>
+        <textarea
+          name="description"
+          value={productData.description}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border rounded"
+          placeholder="Enter product description"
+          rows="3"
+        />
+      </div>
+      {/* Buttons */}
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={handleReview}
+          className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+        >
+          Review
+        </button>
+        <button
+          onClick={handleUpload}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Upload
+        </button>
+      </div>
+
+      {/* Review Section */}
+      {reviewMode && (
+        <div className="mt-6 bg-gray-100 p-4 rounded">
+          <h2 className="text-xl font-bold mb-2">Review Product Details</h2>
+          <p>
+            <strong>Name:</strong> {productData.name}
+          </p>
+          <p>
+            <strong>ID:</strong> {productData.id}
+          </p>
+
+          <p>
+            <strong>Brand:</strong> {productData.brand}
+          </p>
+
+          <p>
+            <strong>Collection:</strong> {productData.collection}
+          </p>
+
+          <p>
+            <strong>Tag:</strong> {productData.tag}
+          </p>
+          <p>
+            <strong>Category:</strong> {productData.category}
+          </p>
+
+          <p>
+            <strong>Stock:</strong> {productData.stock}
+          </p>
+
+          <p>
+            <strong>Price:</strong> ${productData.price}
+          </p>
+          <p>
+            <strong>Offer Price:</strong> ${productData.offerPrice}
+          </p>
+
+          <p>
+            <strong>Rating:</strong> {productData.rating}
+          </p>
+          <p>
+            <strong>Size:</strong> {productData.size}
+          </p>
+
+          <p>
+            <strong>Color:</strong>{" "}
+            <span
+              style={{
+                backgroundColor: productData.color,
+                padding: "5px 10px",
+                borderRadius: "5px",
+                color: "#fff",
+              }}
+            >
+              {productData.color}
+            </span>
+          </p>
+          <p>
+            <strong>Description:</strong> {productData.description}
+          </p>
+          {imagePreview && (
+            <div>
+              <strong>Photo:</strong>
+              <img
+                src={imagePreview}
+                alt="Product Preview"
+                className="mt-2 w-32 h-32 object-cover"
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
