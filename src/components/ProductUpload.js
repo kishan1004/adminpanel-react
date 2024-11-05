@@ -10,6 +10,9 @@ const ProductUpload = () => {
     stock: "",
     rating: "",
     description: "",
+    size: "",
+    color: "#000000",
+    offerPrice: "",
     photo: null,
   });
   const [reviewMode, setReviewMode] = useState(false);
@@ -38,7 +41,7 @@ const ProductUpload = () => {
       ...prevData,
       photo: file,
     }));
-    setImagePreview(URL.createObjectURL(file)); // Create a URL for the image preview
+    setImagePreview(URL.createObjectURL(file));
   };
 
   const handleReview = () => {
@@ -46,16 +49,16 @@ const ProductUpload = () => {
   };
 
   const handleUpload = () => {
-    // Add your upload logic here (e.g., API call to upload the product)
+    // Your upload logic here (e.g., API call)
     console.log("Product uploaded:", productData);
     alert("Product uploaded successfully!");
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center mt-[60px]">
-      <h1 className="text-2xl font-bold mb-6">Product Upload</h1>
+    <div className="min-h-screen w-full flex items-center bg-gray-100 mt-14">
+      <div className="p-8 rounded-lg w-full space-y-4">
+        <h1 className="text-3xl font-bold mb-6">Product Upload</h1>
 
-      <div className="bg-white p-8 shadow-lg rounded-lg w-full max-w-lg space-y-4">
         {/* Input Fields */}
         <div>
           <label className="font-semibold">Product Name</label>
@@ -131,6 +134,17 @@ const ProductUpload = () => {
           />
         </div>
         <div>
+          <label className="font-semibold">Offer Price</label>
+          <input
+            type="number"
+            name="offerPrice"
+            value={productData.offerPrice}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Enter offer price"
+          />
+        </div>
+        <div>
           <label className="font-semibold">Stock Count</label>
           <input
             type="number"
@@ -154,6 +168,37 @@ const ProductUpload = () => {
             className="w-full px-4 py-2 border rounded"
             placeholder="Enter product rating"
           />
+        </div>
+        <div>
+          <label className="font-semibold">Product Size</label>
+          <input
+            type="text"
+            name="size"
+            value={productData.size}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Enter product size"
+          />
+        </div>
+        <div>
+          <label className="font-semibold">Product Color</label>
+          <div className="flex items-center">
+            <input
+              type="color"
+              name="color"
+              value={productData.color}
+              onChange={handleChange}
+              className="w-16 h-10 rounded border-none cursor-pointer"
+            />
+            <input
+              type="text"
+              name="colorText"
+              value={productData.color}
+              onChange={handleChange}
+              className="ml-2 w-full px-4 py-2 border rounded"
+              placeholder="Enter product color"
+            />
+          </div>
         </div>
         <div>
           <label className="font-semibold">Product Photo</label>
@@ -204,10 +249,29 @@ const ProductUpload = () => {
               <strong>Price:</strong> ${productData.price}
             </p>
             <p>
+              <strong>Offer Price:</strong> ${productData.offerPrice}
+            </p>
+            <p>
               <strong>Stock:</strong> {productData.stock}
             </p>
             <p>
               <strong>Rating:</strong> {productData.rating}
+            </p>
+            <p>
+              <strong>Size:</strong> {productData.size}
+            </p>
+            <p>
+              <strong>Color:</strong>{" "}
+              <span
+                style={{
+                  backgroundColor: productData.color,
+                  padding: "5px 10px",
+                  borderRadius: "5px",
+                  color: "#fff",
+                }}
+              >
+                {productData.color}
+              </span>
             </p>
             {imagePreview && (
               <div>

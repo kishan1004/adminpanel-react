@@ -249,7 +249,7 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className=" lg:w-[400px]">
+        <div>
           <h2 className="text-lg font-semibold mb-4 mt-5 lg:mt-10">
             {/* Adjusted margin for mobile responsiveness */}
             Order Status Distribution

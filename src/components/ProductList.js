@@ -16,7 +16,7 @@ const productImages = [
   Product5img,
   Product6img,
 ];
-const productCategories = [
+const initialCategories = [
   "Tshirt",
   "Shirt",
   "Polo",
@@ -30,7 +30,7 @@ const productsData = Array.from({ length: 25 }, (_, i) => ({
   photo: productImages[i % productImages.length],
   name: `Product ${i + 1}`,
   category:
-    productCategories[Math.floor(Math.random() * productCategories.length)],
+    initialCategories[Math.floor(Math.random() * initialCategories.length)],
   brand: "Brand",
   price: (i + 1) * 10,
   rating: (1 + Math.random() * 4).toFixed(1),
@@ -42,6 +42,10 @@ const ProductList = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedRating, setSelectedRating] = useState("");
+  const [productCategories, setProductCategories] = useState(initialCategories);
+  const [newCategory, setNewCategory] = useState("");
+  const [showCategoryInput, setShowCategoryInput] = useState(false);
+
   const itemsPerPage = 8;
 
   const filteredProducts = productsData.filter((product) => {
@@ -67,8 +71,17 @@ const ProductList = () => {
     if (name === "category") setSelectedCategory(value);
     if (name === "price") setSelectedPrice(value);
     if (name === "rating") setSelectedRating(value);
-    setCurrentPage(1); // Reset to page 1 after filtering
+    setCurrentPage(1);
   };
+
+  const handleAddCategory = () => {
+    if (newCategory.trim() && !productCategories.includes(newCategory)) {
+      setProductCategories([...productCategories, newCategory]);
+      setNewCategory("");
+      setShowCategoryInput(false);
+    }
+  };
+
   const navigate = useNavigate();
 
   return (
@@ -76,7 +89,7 @@ const ProductList = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Product List</h1>
         <button
-          onClick={() => navigate("/upload")} // Navigate to ProductUpload
+          onClick={() => navigate("/upload")}
           className="px-4 py-2 bg-slate-900 text-white rounded hover:bg-slate-950"
         >
           Add Product
@@ -89,7 +102,7 @@ const ProductList = () => {
           name="category"
           value={selectedCategory}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded w-full md:w-auto" // Full width on small screens
+          className="px-3 py-2 border rounded w-full md:w-auto"
         >
           <option value="">All Categories</option>
           {productCategories.map((category) => (
@@ -99,11 +112,46 @@ const ProductList = () => {
           ))}
         </select>
 
+        {/* Add Category Button */}
+        <button
+          onClick={() => setShowCategoryInput(true)}
+          className="px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
+        >
+          Add Category
+        </button>
+
+        {showCategoryInput && (
+          <div className="flex items-center gap-2 mt-2 md:mt-0">
+            <input
+              type="text"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              placeholder="New category"
+              className="px-3 py-2 border rounded w-full md:w-auto"
+            />
+            <button
+              onClick={handleAddCategory}
+              className="px-3 py-2 bg-black text-white rounded"
+            >
+              Add
+            </button>
+            <button
+              onClick={() => {
+                setNewCategory("");
+                setShowCategoryInput(false);
+              }}
+              className="px-3 py-2 bg-slate-400 text-white rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+
         <select
           name="price"
           value={selectedPrice}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded w-full md:w-auto" // Full width on small screens
+          className="px-3 py-2 border rounded w-full md:w-auto"
         >
           <option value="">All Prices</option>
           <option value="<50">Under $50</option>
@@ -114,7 +162,7 @@ const ProductList = () => {
           name="rating"
           value={selectedRating}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded w-full md:w-auto" // Full width on small screens
+          className="px-3 py-2 border rounded w-full md:w-auto"
         >
           <option value="">All Ratings</option>
           <option value="1">1 and above</option>
@@ -124,6 +172,7 @@ const ProductList = () => {
         </select>
       </div>
 
+      {/* Product Table */}
       <div className="overflow-x-auto shadow-lg">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-200">

@@ -16,6 +16,7 @@ import Orders from "./components/Orders";
 import Testimonials from "./components/Testimonials";
 import Settings from "./components/Settings";
 import Login from "./components/Login";
+import OrderDetail from "./components/OrderDetail";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -50,6 +51,7 @@ function App() {
                   <Route path="/products" element={<ProductList />} />
                   <Route path="/upload" element={<ProductUpload />} />
                   <Route path="/orders" element={<Orders />} />
+                  <Route path="/orders/:orderId" element={<OrderDetail />} />
                   <Route path="/testimonials" element={<Testimonials />} />
                   <Route path="/settings" element={<Settings />} />
                 </Routes>

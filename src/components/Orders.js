@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Sample order data
 const orderData = [
@@ -165,7 +166,14 @@ const Orders = () => {
           <tbody>
             {currentOrders.map((order) => (
               <tr key={order.id} className="text-center">
-                <td className="py-3 px-4 border">{order.id}</td>
+                <td className="py-3 px-4 border">
+                  <Link
+                    to={`/orders/${order.id}`}
+                    className="text-blue-500 hover:underline"
+                  >
+                    {order.id}
+                  </Link>
+                </td>
                 <td className="py-3 px-4 border">{order.date}</td>
                 <td className="py-3 px-4 border">{order.customer}</td>
                 <td className="py-3 px-4 border">{order.productId}</td>
