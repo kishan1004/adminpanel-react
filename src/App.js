@@ -1,6 +1,5 @@
-// App.js
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -28,11 +27,21 @@ function App() {
 
   const handleLogin = () => {
     setIsAuthenticated(true);
+    localStorage.setItem("isAuthenticated", "true"); // Store auth state in localStorage
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false); // Reset authentication state
+    setIsAuthenticated(false);
+    localStorage.removeItem("isAuthenticated"); // Remove auth state from localStorage
   };
+
+  useEffect(() => {
+    // Check if the user is authenticated when the app loads
+    const storedAuthState = localStorage.getItem("isAuthenticated");
+    if (storedAuthState === "true") {
+      setIsAuthenticated(true); // Set state based on stored value
+    }
+  }, []);
 
   return (
     <Router>

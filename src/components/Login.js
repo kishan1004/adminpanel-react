@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../images/starringblack.png";
 import { useNavigate } from "react-router-dom";
 
@@ -7,13 +7,26 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    // Check if the user is already logged in (check localStorage)
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      navigate("/dashboard"); // Redirect to dashboard if already logged in
+    }
+  }, [navigate]);
+
   const handleLogin = (e) => {
     e.preventDefault();
 
     // Check if the username and password are correct
     if (username === "StarringAdmin01" && password === "*#123&%478SSERd") {
-      onLogin(); // Call the onLogin prop to set authentication
-      navigate("/dashboard"); // Redirect to dashboard
+      // Call the onLogin prop to set authentication
+      onLogin();
+
+      // Persist login state in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+
+      // Redirect to dashboard
+      navigate("/dashboard");
     } else {
       alert("Invalid username or password");
     }

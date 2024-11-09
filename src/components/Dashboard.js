@@ -36,71 +36,91 @@ const Dashboard = () => {
   // Dummy data for different time ranges
   const statsData = {
     lastDay: {
-      totalUsers: 10,
-      totalOrders: 25,
-      completedOrders: 18,
-      pendingOrders: 7,
-      earnings: "$500",
-      ordersOverTime: [5, 15, 25], // Total orders every 6 hours
-      completedOrdersOverTime: [2, 10, 18], // Completed orders every 6 hours
-      pendingOrdersOverTime: [3, 5, 7], // Pending orders every 6 hours
-      timeLabels: ["0h", "6h", "12h"], // Labels for 6-hour intervals
+      totalUsers: 150,
+      totalOrders: 45,
+      completedOrders: 38,
+      pendingOrders: 5,
+      canceledOrders: 2,
+      returns: 3,
+      earnings: "$1,200",
+      ordersOverTime: [10, 20, 40, 45], // Orders every 6 hours
+      completedOrdersOverTime: [5, 15, 30, 38],
+      pendingOrdersOverTime: [2, 4, 5, 5],
+      timeLabels: ["0h", "6h", "12h", "18h"],
       trafficData: {
-        organicSearch: 50,
-        facebook: 20,
-        instagram: 10,
-        dailySales: 500,
+        organicSearch: 120,
+        facebook: 50,
+        instagram: 25,
+        direct: 40,
+        referral: 20,
+        paidAds: 15,
+        dailySales: 1200,
       },
     },
     lastWeek: {
-      totalUsers: 200,
-      totalOrders: 450,
-      completedOrders: 300,
-      pendingOrders: 150,
-      earnings: "$3,000",
-      ordersOverTime: [50, 200, 400, 450], // Total orders every 2 days
-      completedOrdersOverTime: [20, 100, 200, 300], // Completed orders every 2 days
-      pendingOrdersOverTime: [30, 50, 70, 150], // Pending orders every 2 days
-      timeLabels: ["Day 0", "Day 2", "Day 4", "Day 6"], // Labels for 2-day intervals
+      totalUsers: 900,
+      totalOrders: 600,
+      completedOrders: 500,
+      pendingOrders: 80,
+      canceledOrders: 20,
+      returns: 15,
+      earnings: "$10,500",
+      ordersOverTime: [100, 300, 500, 600],
+      completedOrdersOverTime: [80, 250, 400, 500],
+      pendingOrdersOverTime: [20, 30, 70, 80],
+      timeLabels: ["Day 1", "Day 3", "Day 5", "Day 7"],
       trafficData: {
-        organicSearch: 300,
-        facebook: 100,
-        instagram: 50,
-        dailySales: 500,
+        organicSearch: 400,
+        facebook: 120,
+        instagram: 100,
+        direct: 150,
+        referral: 80,
+        paidAds: 60,
+        dailySales: 1500,
       },
     },
     lastMonth: {
-      totalUsers: 800,
-      totalOrders: 1200,
-      completedOrders: 950,
-      pendingOrders: 250,
-      earnings: "$12,000",
-      ordersOverTime: [100, 500, 900, 1200], // Total orders every 10 days
-      completedOrdersOverTime: [50, 400, 800, 950], // Completed orders every 10 days
-      pendingOrdersOverTime: [20, 50, 150, 250], // Pending orders every 10 days
-      timeLabels: ["Day 0", "Day 15", "Day 30"], // Labels for 10-day intervals
+      totalUsers: 3500,
+      totalOrders: 4500,
+      completedOrders: 4000,
+      pendingOrders: 300,
+      canceledOrders: 100,
+      returns: 50,
+      earnings: "$78,000",
+      ordersOverTime: [500, 1500, 3000, 4500], // Orders every 10 days
+      completedOrdersOverTime: [400, 1200, 2800, 4000],
+      pendingOrdersOverTime: [50, 100, 200, 300],
+      timeLabels: ["Day 1", "Day 10", "Day 20", "Day 30"],
       trafficData: {
-        organicSearch: 600,
-        facebook: 300,
-        instagram: 100,
-        dailySales: 500,
+        organicSearch: 1500,
+        facebook: 600,
+        instagram: 400,
+        direct: 800,
+        referral: 350,
+        paidAds: 250,
+        dailySales: 2600,
       },
     },
     lastYear: {
-      totalUsers: 9500,
-      totalOrders: 18000,
-      completedOrders: 16000,
+      totalUsers: 42000,
+      totalOrders: 50000,
+      completedOrders: 47000,
       pendingOrders: 2000,
-      earnings: "$150,000",
-      ordersOverTime: [2000, 8000, 12000, 16000, 18000], // Total orders every 3 months
-      completedOrdersOverTime: [1500, 5000, 11000, 15000, 16000], // Completed orders every 3 months
-      pendingOrdersOverTime: [500, 3000, 5000, 1000, 2000], // Pending orders every 3 months
-      timeLabels: ["Month 0", "Month 3", "Month 6", "Month 9", "Month 12"], // Labels for 3-month intervals
+      canceledOrders: 500,
+      returns: 300,
+      earnings: "$650,000",
+      ordersOverTime: [5000, 15000, 30000, 45000, 50000], // Every 3 months
+      completedOrdersOverTime: [4500, 14000, 27000, 42000, 47000],
+      pendingOrdersOverTime: [300, 500, 1500, 2000, 2000],
+      timeLabels: ["Month 1", "Month 3", "Month 6", "Month 9", "Month 12"],
       trafficData: {
-        organicSearch: 4000,
-        facebook: 1500,
-        instagram: 500,
-        dailySales: 500,
+        organicSearch: 20000,
+        facebook: 6000,
+        instagram: 4000,
+        direct: 9000,
+        referral: 3000,
+        paidAds: 2000,
+        dailySales: 3500,
       },
     },
   };
@@ -134,17 +154,31 @@ const Dashboard = () => {
   };
 
   const pieChartData = {
-    labels: ["Completed Orders", "Pending Orders"],
+    labels: ["Completed", "Pending", "Canceled", "Returns"],
     datasets: [
       {
-        label: "Order Status",
-        data: [stats.completedOrders, stats.pendingOrders],
-        backgroundColor: ["rgba(75,192,192,1)", "rgba(255,205,86,1)"],
-        hoverBackgroundColor: ["rgba(75,192,192,0.8)", "rgba(255,205,86,0.8)"],
+        label: "Order Status Distribution",
+        data: [
+          stats.completedOrders,
+          stats.pendingOrders,
+          stats.canceledOrders,
+          stats.returns,
+        ],
+        backgroundColor: [
+          "rgba(75,192,192,1)",
+          "rgba(255,205,86,1)",
+          "rgba(255,99,132,1)",
+          "rgba(153,102,255,1)",
+        ],
+        hoverBackgroundColor: [
+          "rgba(75,192,192,0.8)",
+          "rgba(255,205,86,0.8)",
+          "rgba(255,99,132,0.8)",
+          "rgba(153,102,255,0.8)",
+        ],
       },
     ],
   };
-
   return (
     <div className="p-6 bg-gray-100 min-h-screen w-full mt-[60px]">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
@@ -263,7 +297,7 @@ const Dashboard = () => {
                 responsive: true,
                 plugins: {
                   legend: {
-                    position: "bottom",
+                    position: "right",
                   },
                   title: {
                     display: true,
