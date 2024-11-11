@@ -178,7 +178,7 @@ const Orders = () => {
                 <td className="py-3 px-4 border">{order.customer}</td>
                 <td className="py-3 px-4 border">{order.productId}</td>
                 <td className="py-3 px-4 border">{order.count}</td>
-                <td className="py-3 px-4 border">${order.totalPrice}</td>
+                <td className="py-3 px-4 border">Rs.{order.totalPrice}</td>
                 <td
                   className={`py-3 px-4 border ${getPaymentStatusClass(
                     order.paymentStatus

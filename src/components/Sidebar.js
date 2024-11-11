@@ -12,8 +12,6 @@ import {
 function Sidebar({ toggleSidebar }) {
   return (
     <aside className="w-64 min-h-screen mt-[60px] bg-gray-100 text-black flex flex-col p-4 space-y-4">
-      <h1 className="text-2xl font-semibold">Admin Panel</h1>
-
       <nav className="flex flex-col space-y-3">
         <NavLink
           to="/dashboard"

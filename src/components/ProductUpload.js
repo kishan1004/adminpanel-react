@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 
+const convertCMYKtoRGB = (c, m, y, k) => {
+  const r = 255 * (1 - c / 100) * (1 - k / 100);
+  const g = 255 * (1 - m / 100) * (1 - k / 100);
+  const b = 255 * (1 - y / 100) * (1 - k / 100);
+  return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+};
 const ProductUpload = () => {
   const [productData, setProductData] = useState({
     name: "",
@@ -13,8 +19,11 @@ const ProductUpload = () => {
     size: "",
     color: "#000000",
     offerPrice: "",
+    offerPercentage: "",
+    cmykColor: { c: 0, m: 0, y: 0, k: 0 },
     photo: null,
   });
+
   const [reviewMode, setReviewMode] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -33,6 +42,21 @@ const ProductUpload = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+  const handleCMYKChange = (e) => {
+    const { name, value } = e.target;
+    const newCMYK = { ...productData.cmykColor, [name]: Number(value) };
+    const newColor = convertCMYKtoRGB(
+      newCMYK.c,
+      newCMYK.m,
+      newCMYK.y,
+      newCMYK.k
+    );
+    setProductData({
+      ...productData,
+      cmykColor: newCMYK,
+      color: newColor,
+    });
   };
 
   const handleFileChange = (e) => {
@@ -202,35 +226,73 @@ const ProductUpload = () => {
           />
         </div>
         <div>
-          <label className="font-semibold">Product Size</label>
+          <label className="font-semibold">Offer Percentage</label>
           <input
             type="text"
-            name="size"
-            value={productData.size}
+            name="offerPercentage"
+            value={productData.offerPercentage}
             onChange={handleChange}
             className="w-full px-4 py-2 border rounded"
-            placeholder="Enter product size"
+            placeholder="Enter offer percentage"
           />
         </div>
 
         <div>
-          <label className="font-semibold">Product Color</label>
-          <div className="flex items-center">
-            <input
-              type="color"
-              name="color"
-              value={productData.color}
-              onChange={handleChange}
-              className="w-16 h-10 rounded border-none cursor-pointer"
-            />
-            <input
-              type="text"
-              name="colorText"
-              value={productData.color}
-              onChange={handleChange}
-              className="ml-2 w-full px-4 py-2 border rounded"
-              placeholder="Enter product color"
-            />
+          <label className="font-semibold">Product Color (CMYK)</label>
+          <div className="flex items-baseline space-x-2">
+            <div>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  name="c"
+                  value={productData.cmykColor.c}
+                  onChange={handleCMYKChange}
+                  className="w-16 px-2 py-1 border rounded"
+                  placeholder="C"
+                  min="0"
+                  max="100"
+                />
+                <input
+                  type="number"
+                  name="m"
+                  value={productData.cmykColor.m}
+                  onChange={handleCMYKChange}
+                  className="w-16 px-2 py-1 border rounded"
+                  placeholder="M"
+                  min="0"
+                  max="100"
+                />
+                <input
+                  type="number"
+                  name="y"
+                  value={productData.cmykColor.y}
+                  onChange={handleCMYKChange}
+                  className="w-16 px-2 py-1 border rounded"
+                  placeholder="Y"
+                  min="0"
+                  max="100"
+                />
+                <input
+                  type="number"
+                  name="k"
+                  value={productData.cmykColor.k}
+                  onChange={handleCMYKChange}
+                  className="w-16 px-2 py-1 border rounded"
+                  placeholder="K"
+                  min="0"
+                  max="100"
+                />
+              </div>
+            </div>
+            <div className="grow">
+              <input
+                type="text"
+                value={productData.color}
+                readOnly
+                className="mt-2 w-full px-4 py-2 border rounded"
+                placeholder="Converted RGB Value"
+              />
+            </div>
           </div>
         </div>
         <div>
@@ -301,21 +363,22 @@ const ProductUpload = () => {
           </p>
 
           <p>
-            <strong>Price:</strong> ${productData.price}
+            <strong>Price:</strong> Rs.{productData.price}
           </p>
           <p>
-            <strong>Offer Price:</strong> ${productData.offerPrice}
+            <strong>Offer Price:</strong> Rs.{productData.offerPrice}
           </p>
 
           <p>
             <strong>Rating:</strong> {productData.rating}
           </p>
+
           <p>
-            <strong>Size:</strong> {productData.size}
+            <strong>Offer Percentage</strong> {productData.offerPercentage}
           </p>
 
           <p>
-            <strong>Color:</strong>{" "}
+            <strong>Color:</strong>
             <span
               style={{
                 backgroundColor: productData.color,

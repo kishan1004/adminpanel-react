@@ -16,13 +16,17 @@ import Testimonials from "./components/Testimonials";
 import Settings from "./components/Settings";
 import Login from "./components/Login";
 import OrderDetail from "./components/OrderDetail";
+import UserManagement from "./components/UserManagement";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    if (!isLargeScreen) {
+      setIsSidebarOpen(!isSidebarOpen);
+    }
   };
 
   const handleLogin = () => {
@@ -41,6 +45,18 @@ function App() {
     if (storedAuthState === "true") {
       setIsAuthenticated(true); // Set state based on stored value
     }
+
+    // Add resize event listener to determine if the screen is large
+    const updateScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024); // Check if screen is lg or larger (1024px breakpoint)
+    };
+
+    updateScreenSize(); // Initial check on load
+    window.addEventListener("resize", updateScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", updateScreenSize);
+    };
   }, []);
 
   return (
@@ -63,6 +79,7 @@ function App() {
                   <Route path="/orders/:orderId" element={<OrderDetail />} />
                   <Route path="/testimonials" element={<Testimonials />} />
                   <Route path="/settings" element={<Settings />} />
+                  <Route path="/user-management" element={<UserManagement />} />
                 </Routes>
               </div>
             </div>

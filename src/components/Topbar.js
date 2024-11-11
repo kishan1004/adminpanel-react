@@ -3,9 +3,10 @@ import Logo from "../images/starringblack.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoNotifications } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
+import { FaUserCog } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const recentOrders = [
+const initialRecentOrders = [
   {
     id: "#ts1",
     date: "2024-10-01",
@@ -81,13 +82,18 @@ const recentOrders = [
 const Topbar = ({ toggleSidebar, onLogout }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [recentOrders, setRecentOrders] = useState(initialRecentOrders);
   const [clickedOrderIds, setClickedOrderIds] = useState([]);
   const notificationRef = useRef(null);
   const accountRef = useRef(null);
 
   const toggleNotificationDropdown = () => {
-    setIsNotificationOpen(!isNotificationOpen);
-    if (isAccountOpen) setIsAccountOpen(false);
+    setIsNotificationOpen((prev) => !prev);
+  };
+
+  const clearNotifications = () => {
+    setRecentOrders([]);
+    setClickedOrderIds([]);
   };
 
   const toggleAccountDropdown = () => {
@@ -121,10 +127,8 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
   }, []);
 
   const handleLinkClick = (orderId) => {
-    setClickedOrderIds((prevClickedOrderIds) =>
-      prevClickedOrderIds.includes(orderId)
-        ? prevClickedOrderIds
-        : [...prevClickedOrderIds, orderId]
+    setClickedOrderIds((prevIds) =>
+      prevIds.includes(orderId) ? prevIds : [...prevIds, orderId]
     );
     setIsNotificationOpen(false);
   };
@@ -139,6 +143,7 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
         <img src={Logo} alt="Logo" className="w-[120px] sm:w-[180px]" />
       </div>
       <div className="flex items-center gap-3 sm:gap-10 relative">
+        {/* Notification Icon */}
         <div className="relative" ref={notificationRef}>
           <IoNotifications
             className="text-xl sm:text-2xl cursor-pointer"
@@ -150,31 +155,38 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
             </span>
           )}
           {isNotificationOpen && (
-            <div className="fixed right-2 mt-2 w-[90vw]  max-w-[400px] bg-white border border-gray-300 shadow-lg z-50 h-[80vh] overflow-scroll">
+            <div className="fixed right-2 mt-2 w-[350px] bg-white border border-gray-300 shadow-lg z-50 h-[90vh] overflow-scroll">
               <div className="p-4">
                 <h4 className="font-bold text-sm sm:text-lg mb-2">
                   Recent Orders
                 </h4>
+                <button
+                  onClick={clearNotifications}
+                  className="mb-4 text-sm text-blue-500 hover:underline"
+                >
+                  Clear Notifications
+                </button>
                 <ul className="h-full overflow-y-auto">
-                  {recentOrders.map((order) => (
-                    <li
-                      key={order.id}
-                      className={`px-4 py-6 cursor-pointer border-b border-gray-300 ${
-                        clickedOrderIds.includes(order.id)
-                          ? "bg-gray-200"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      <Link
-                        to={`/orders/${order.id}`}
-                        onClick={() => handleLinkClick(order.id)}
+                  {recentOrders.length > 0 ? (
+                    recentOrders.map((order) => (
+                      <li
+                        key={order.id}
+                        className={`px-4 py-6 cursor-pointer border-b border-gray-300 ${
+                          clickedOrderIds.includes(order.id)
+                            ? "bg-gray-200"
+                            : "hover:bg-gray-100"
+                        }`}
                       >
-                        {getNotificationText(order)}
-                      </Link>
-                    </li>
-                  ))}
-                  {recentOrders.length === 0 && (
-                    <li className="px-4 py-2 text-gray-500">
+                        <Link
+                          to={`/orders/${order.id}`}
+                          onClick={() => handleLinkClick(order.id)}
+                        >
+                          {getNotificationText(order)}
+                        </Link>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="px-4 py-2 text-gray-500 flex items-center justify-center">
                       No recent orders
                     </li>
                   )}
@@ -184,6 +196,14 @@ const Topbar = ({ toggleSidebar, onLogout }) => {
           )}
         </div>
 
+        {/* User Management Icon */}
+        <div className="relative">
+          <Link to="/user-management">
+            <FaUserCog className="text-xl sm:text-2xl cursor-pointer" />
+          </Link>
+        </div>
+
+        {/* Account Icon */}
         <div className="relative" ref={accountRef}>
           <button
             onClick={toggleAccountDropdown}

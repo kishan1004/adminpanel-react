@@ -35,7 +35,7 @@ const OrderDetail = () => {
         <strong>Quantity:</strong> {orderDetails.count}
       </p>
       <p>
-        <strong>Total Price:</strong> ${orderDetails.totalPrice}
+        <strong>Total Price:</strong> Rs.{orderDetails.totalPrice}
       </p>
       <p>
         <strong>Payment Status:</strong> {orderDetails.paymentStatus}

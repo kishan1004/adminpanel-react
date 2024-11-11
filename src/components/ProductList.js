@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSave } from "react-icons/fa";
 import Product1img from "../images/product1.jpeg";
 import Product2img from "../images/product2.jpeg";
 import Product3img from "../images/product3.jpeg";
@@ -35,26 +35,32 @@ const productsData = Array.from({ length: 25 }, (_, i) => ({
   price: (i + 1) * 10,
   rating: (1 + Math.random() * 4).toFixed(1),
   stock: Math.floor(Math.random() * 100),
+  stockUpdatedDate: new Date(
+    new Date().setDate(new Date().getDate() - Math.floor(Math.random() * 30))
+  ),
 }));
 
 const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState("");
-  const [selectedRating, setSelectedRating] = useState("");
-  const [productCategories, setProductCategories] = useState(initialCategories);
-  const [newCategory, setNewCategory] = useState("");
-  const [showCategoryInput, setShowCategoryInput] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [productCategories] = useState(initialCategories);
+  const [products, setProducts] = useState(productsData);
+  const [isEditing, setIsEditing] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
 
   const itemsPerPage = 8;
 
-  const filteredProducts = productsData.filter((product) => {
-    return (
-      (!selectedCategory || product.category === selectedCategory) &&
-      (!selectedPrice ||
-        (selectedPrice === "<50" ? product.price < 50 : product.price >= 50)) &&
-      (!selectedRating || product.rating >= selectedRating)
-    );
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      !selectedCategory || product.category === selectedCategory;
+    const matchesDate =
+      (!startDate ||
+        new Date(product.stockUpdatedDate) >= new Date(startDate)) &&
+      (!endDate || new Date(product.stockUpdatedDate) <= new Date(endDate));
+
+    return matchesCategory && matchesDate;
   });
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -65,20 +71,43 @@ const ProductList = () => {
   );
 
   const handlePageChange = (page) => setCurrentPage(page);
+  const handleEditClick = (product) => {
+    setIsEditing(product.id);
+    setEditFormData({ ...product });
+  };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSaveClick = () => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === isEditing ? { ...editFormData } : product
+      )
+    );
+    setIsEditing(null);
+  };
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     if (name === "category") setSelectedCategory(value);
-    if (name === "price") setSelectedPrice(value);
-    if (name === "rating") setSelectedRating(value);
     setCurrentPage(1);
   };
 
-  const handleAddCategory = () => {
-    if (newCategory.trim() && !productCategories.includes(newCategory)) {
-      setProductCategories([...productCategories, newCategory]);
-      setNewCategory("");
-      setShowCategoryInput(false);
+  const handleDelete = (productId) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.id !== productId)
+      );
+    }
+  };
+
+  const handleEdit = (productId) => {
+    const productToEdit = products.find((product) => product.id === productId);
+    if (productToEdit) {
+      alert(`Edit Product: ${productToEdit.name}`);
+      // Additional code for redirecting to the edit page or displaying an edit form can be added here.
     }
   };
 
@@ -102,7 +131,7 @@ const ProductList = () => {
           name="category"
           value={selectedCategory}
           onChange={handleFilterChange}
-          className="px-3 py-2 border rounded w-full md:w-auto"
+          className="px-3 py-2 border rounded w-full md:w-auto overflow-scroll  max-h-40"
         >
           <option value="">All Categories</option>
           {productCategories.map((category) => (
@@ -112,64 +141,23 @@ const ProductList = () => {
           ))}
         </select>
 
-        {/* Add Category Button */}
-        <button
-          onClick={() => setShowCategoryInput(true)}
-          className="px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
-        >
-          Add Category
-        </button>
-
-        {showCategoryInput && (
-          <div className="flex items-center gap-2 mt-2 md:mt-0">
-            <input
-              type="text"
-              value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
-              placeholder="New category"
-              className="px-3 py-2 border rounded w-full md:w-auto"
-            />
-            <button
-              onClick={handleAddCategory}
-              className="px-3 py-2 bg-black text-white rounded"
-            >
-              Add
-            </button>
-            <button
-              onClick={() => {
-                setNewCategory("");
-                setShowCategoryInput(false);
-              }}
-              className="px-3 py-2 bg-slate-400 text-white rounded"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
-
-        <select
-          name="price"
-          value={selectedPrice}
-          onChange={handleFilterChange}
-          className="px-3 py-2 border rounded w-full md:w-auto"
-        >
-          <option value="">All Prices</option>
-          <option value="<50">Under $50</option>
-          <option value=">=50">$50 and above</option>
-        </select>
-
-        <select
-          name="rating"
-          value={selectedRating}
-          onChange={handleFilterChange}
-          className="px-3 py-2 border rounded w-full md:w-auto"
-        >
-          <option value="">All Ratings</option>
-          <option value="1">1 and above</option>
-          <option value="2">2 and above</option>
-          <option value="3">3 and above</option>
-          <option value="4">4 and above</option>
-        </select>
+        {/* Date range filters */}
+        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+          <label className="font-medium">From:</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="px-3 py-2 border rounded w-full md:w-auto"
+          />
+          <label className="font-medium">To:</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="px-3 py-2 border rounded w-full md:w-auto"
+          />
+        </div>
       </div>
 
       {/* Product Table */}
@@ -184,6 +172,7 @@ const ProductList = () => {
               <th className="py-3 px-4 border">Price</th>
               <th className="py-3 px-4 border">Rating</th>
               <th className="py-3 px-4 border">Stock</th>
+              <th className="py-3 px-4 border">Stock Updated Date</th>
               <th className="py-3 px-4 border">Action</th>
             </tr>
           </thead>
@@ -197,18 +186,116 @@ const ProductList = () => {
                     alt={product.name}
                     className="w-10 h-14 rounded"
                   />
-                  <span>{product.name}</span>
+                  {isEditing === product.id ? (
+                    <input
+                      type="text"
+                      name="name"
+                      value={editFormData.name}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    <span>{product.name}</span>
+                  )}
                 </td>
-                <td className="py-3 px-4 border">{product.category}</td>
-                <td className="py-3 px-4 border">{product.brand}</td>
-                <td className="py-3 px-4 border">${product.price}</td>
-                <td className="py-3 px-4 border">{product.rating}</td>
-                <td className="py-3 px-4 border">{product.stock}</td>
-                <td className="py-3 px-4 flex justify-center bg-gray-100 gap-3">
-                  <button className="text-blue-500 hover:text-blue-700">
-                    <FaEdit />
-                  </button>
-                  <button className="text-red-500 hover:text-red-700">
+                <td className="py-3 px-4 border">
+                  {isEditing === product.id ? (
+                    <input
+                      type="text"
+                      name="category"
+                      value={editFormData.category}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    product.category
+                  )}
+                </td>
+                <td className="py-3 px-4 border">
+                  {isEditing === product.id ? (
+                    <input
+                      type="text"
+                      name="brand"
+                      value={editFormData.brand}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    product.brand
+                  )}
+                </td>
+                <td className="py-3 px-4 border">
+                  {isEditing === product.id ? (
+                    <input
+                      type="number"
+                      name="price"
+                      value={editFormData.price}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    `Rs.${product.price}`
+                  )}
+                </td>
+                <td className="py-3 px-4 border">
+                  {isEditing === product.id ? (
+                    <input
+                      type="number"
+                      name="rating"
+                      value={editFormData.rating}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    product.rating
+                  )}
+                </td>
+                <td className="py-3 px-4 border">
+                  {isEditing === product.id ? (
+                    <input
+                      type="number"
+                      name="stock"
+                      value={editFormData.stock}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    product.stock
+                  )}
+                </td>
+                <td className="py-3 px-4 border">
+                  {isEditing === product.id ? (
+                    <input
+                      type="date"
+                      name="stockUpdatedDate"
+                      value={editFormData.stockUpdatedDate}
+                      onChange={handleInputChange}
+                      className="border px-2 py-1 rounded"
+                    />
+                  ) : (
+                    product.stockUpdatedDate.toLocaleDateString()
+                  )}
+                </td>
+                <td className="py-3 px-4 flex justify-center gap-3 bg-gray-100">
+                  {isEditing === product.id ? (
+                    <button
+                      onClick={handleSaveClick}
+                      className="text-green-500 hover:text-green-700"
+                    >
+                      <FaSave />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleEditClick(product)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => handleDelete(product.id)}
+                  >
                     <FaTrash />
                   </button>
                 </td>
@@ -227,7 +314,6 @@ const ProductList = () => {
         >
           Previous
         </button>
-
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
@@ -241,11 +327,11 @@ const ProductList = () => {
             {i + 1}
           </button>
         ))}
-
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400 disabled:opacity-50"
+          className="px-3 py-1```javascript
+        rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400 disabled:opacity-50"
         >
           Next
         </button>
