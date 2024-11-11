@@ -103,14 +103,6 @@ const ProductList = () => {
     }
   };
 
-  const handleEdit = (productId) => {
-    const productToEdit = products.find((product) => product.id === productId);
-    if (productToEdit) {
-      alert(`Edit Product: ${productToEdit.name}`);
-      // Additional code for redirecting to the edit page or displaying an edit form can be added here.
-    }
-  };
-
   const navigate = useNavigate();
 
   return (
