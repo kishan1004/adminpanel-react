@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { Doughnut } from "react-chartjs-2";
-import { PolarArea } from "react-chartjs-2";
+// import { PolarArea } from "react-chartjs-2";
 
 import { FaSearch, FaFacebook, FaInstagram } from "react-icons/fa";
 import {
