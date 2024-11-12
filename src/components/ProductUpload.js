@@ -27,14 +27,14 @@ const ProductUpload = () => {
   const [reviewMode, setReviewMode] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
 
-  const categories = [
-    "Tshirt",
-    "Shirt",
-    "Polo",
-    "Oversized",
-    "Jacket",
-    "Hoodie",
-  ];
+  // const categories = [
+  //   "Tshirt",
+  //   "Shirt",
+  //   "Polo",
+  //   "Oversized",
+  //   "Jacket",
+  //   "Hoodie",
+  // ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,12 +60,12 @@ const ProductUpload = () => {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
+    const files = Array.from(e.target.files); // Get all selected files
     setProductData((prevData) => ({
       ...prevData,
-      photo: file,
+      photos: files, // Save all files in an array
     }));
-    setImagePreview(URL.createObjectURL(file));
+    setImagePreview(files.map((file) => URL.createObjectURL(file))); // Generate previews for each file
   };
 
   const handleReview = () => {
@@ -119,6 +119,17 @@ const ProductUpload = () => {
         </div>
         <div>
           <label className="font-semibold">Product Category</label>
+          <input
+            type="text"
+            name="brand"
+            value={productData.category}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Enter product category"
+          />
+        </div>
+        {/* <div>
+          <label className="font-semibold">Product Category</label>
           <select
             name="category"
             value={productData.category}
@@ -134,7 +145,7 @@ const ProductUpload = () => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div>
           <label className="font-semibold">Tag</label>
@@ -296,10 +307,11 @@ const ProductUpload = () => {
           </div>
         </div>
         <div>
-          <label className="font-semibold">Product Photo</label>
+          <label className="font-semibold">Product Photos(Multiple)</label>
           <input
             type="file"
-            name="photo"
+            name="photos"
+            multiple
             onChange={handleFileChange}
             className="w-full px-4 py-2 border rounded"
           />
@@ -393,14 +405,19 @@ const ProductUpload = () => {
           <p>
             <strong>Description:</strong> {productData.description}
           </p>
-          {imagePreview && (
+          {imagePreview && imagePreview.length > 0 && (
             <div>
-              <strong>Photo:</strong>
-              <img
-                src={imagePreview}
-                alt="Product Preview"
-                className="mt-2 w-32 h-32 object-cover"
-              />
+              <strong>Photos:</strong>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {imagePreview.map((src, index) => (
+                  <img
+                    key={index}
+                    src={src}
+                    alt={`Product Preview ${index + 1}`}
+                    className="w-32 h-32 object-cover"
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>
