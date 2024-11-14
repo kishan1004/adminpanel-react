@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([
@@ -75,9 +77,16 @@ const UserManagement = () => {
       setUsers(users.filter((user) => user.id !== id));
     }
   };
+  const navigate = useNavigate();
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen w-full mt-[60px]">
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="mb-4 flex items-center"
+      >
+        <FaArrowLeftLong />
+      </button>
       <h1 className="text-2xl font-bold mb-4">User Management</h1>
 
       <div className="mb-8">

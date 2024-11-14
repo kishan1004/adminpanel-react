@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Settings = () => {
   const [allowAccountCreation, setAllowAccountCreation] = useState(false);
   const [allowPasswordReset, setAllowPasswordReset] = useState(false);
+  const navigate = useNavigate(); // Initialize the navigate hook
 
   const toggleAccountCreation = () => {
     setAllowAccountCreation(!allowAccountCreation);
@@ -10,6 +12,10 @@ const Settings = () => {
 
   const togglePasswordReset = () => {
     setAllowPasswordReset(!allowPasswordReset);
+  };
+
+  const goToUserManagement = () => {
+    navigate("/user-management"); // Navigate to the user-management page
   };
 
   return (
@@ -50,6 +56,16 @@ const Settings = () => {
             />
           </button>
         </div>
+      </div>
+
+      {/* Button to go to user-management */}
+      <div className="mt-6">
+        <button
+          onClick={goToUserManagement}
+          className="px-6 py-2 bg-gray-600 text-white rounded-md shadow-md"
+        >
+          Go to User Management
+        </button>
       </div>
     </div>
   );

@@ -79,6 +79,17 @@ function Sidebar({ toggleSidebar }) {
           <FaCog className="mr-3" /> Settings
         </NavLink>
       </nav>
+      <NavLink
+        to="/report"
+        className={({ isActive }) =>
+          `flex items-center px-3 py-2 rounded ${
+            isActive ? "bg-black text-white" : "hover:bg-black hover:text-white"
+          }`
+        }
+        onClick={toggleSidebar} // Close sidebar on link click
+      >
+        <FaBox className="mr-3" /> Report
+      </NavLink>
     </aside>
   );
 }

@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
-const convertCMYKtoRGB = (c, m, y, k) => {
-  const r = 255 * (1 - c / 100) * (1 - k / 100);
-  const g = 255 * (1 - m / 100) * (1 - k / 100);
-  const b = 255 * (1 - y / 100) * (1 - k / 100);
-  return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
-};
 const ProductUpload = () => {
   const [productData, setProductData] = useState({
     name: "",
@@ -13,28 +9,39 @@ const ProductUpload = () => {
     brand: "",
     category: "",
     price: "",
-    stock: "",
+    stock: {},
     rating: "",
     description: "",
-    size: "",
-    color: "#000000",
+    size: [],
     offerPrice: "",
     offerPercentage: "",
-    cmykColor: { c: 0, m: 0, y: 0, k: 0 },
-    photo: null,
+    photos: [],
   });
 
   const [reviewMode, setReviewMode] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
 
-  // const categories = [
-  //   "Tshirt",
-  //   "Shirt",
-  //   "Polo",
-  //   "Oversized",
-  //   "Jacket",
-  //   "Hoodie",
-  // ];
+  const categories = [
+    "Tshirt",
+    "Shirt",
+    "Polo",
+    "Oversized",
+    "Jacket",
+    "Hoodie",
+  ];
+
+  // Effect to update offerPrice whenever offerPercentage changes
+  useEffect(() => {
+    if (productData.offerPercentage && productData.price) {
+      const offerPrice =
+        productData.price -
+        (productData.price * productData.offerPercentage) / 100;
+      setProductData((prevData) => ({
+        ...prevData,
+        offerPrice: offerPrice.toFixed(2),
+      }));
+    }
+  }, [productData.offerPercentage, productData.price]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,29 +50,47 @@ const ProductUpload = () => {
       [name]: value,
     }));
   };
-  const handleCMYKChange = (e) => {
-    const { name, value } = e.target;
-    const newCMYK = { ...productData.cmykColor, [name]: Number(value) };
-    const newColor = convertCMYKtoRGB(
-      newCMYK.c,
-      newCMYK.m,
-      newCMYK.y,
-      newCMYK.k
-    );
-    setProductData({
-      ...productData,
-      cmykColor: newCMYK,
-      color: newColor,
+
+  const handleSizeChange = (e) => {
+    const size = e.target.value;
+    setProductData((prevData) => {
+      const newSizes = e.target.checked
+        ? [...prevData.size, size] // Add the size if checked
+        : prevData.size.filter((item) => item !== size); // Remove the size if unchecked
+
+      return {
+        ...prevData,
+        size: newSizes,
+      };
     });
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files); // Get all selected files
+  const handleStockChange = (e, size) => {
+    const { value } = e.target;
     setProductData((prevData) => ({
       ...prevData,
-      photos: files, // Save all files in an array
+      stock: {
+        ...prevData.stock,
+        [size]: value,
+      },
     }));
-    setImagePreview(files.map((file) => URL.createObjectURL(file))); // Generate previews for each file
+  };
+
+  const handlePriceChange = (e) => {
+    const { value } = e.target;
+    setProductData((prevData) => ({
+      ...prevData,
+      price: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setProductData((prevData) => ({
+      ...prevData,
+      photos: files,
+    }));
+    setImagePreview(files.map((file) => URL.createObjectURL(file)));
   };
 
   const handleReview = () => {
@@ -73,13 +98,20 @@ const ProductUpload = () => {
   };
 
   const handleUpload = () => {
-    // Your upload logic here (e.g., API call)
     console.log("Product uploaded:", productData);
     alert("Product uploaded successfully!");
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen w-full  bg-gray-100 mt-14 p-8">
+    <div className="min-h-screen w-full bg-gray-100 mt-14 p-8">
+      <button
+        onClick={() => navigate("/products")}
+        className="mb-4 flex items-center"
+      >
+        <FaArrowLeftLong />
+      </button>
       <h1 className="text-3xl font-bold mb-6">Product Upload</h1>
       <div className="rounded-lg w-full gap-5 grid grid-cols-1 md:grid-cols-2">
         {/* Input Fields */}
@@ -117,18 +149,8 @@ const ProductUpload = () => {
             placeholder="Enter product brand"
           />
         </div>
+
         <div>
-          <label className="font-semibold">Product Category</label>
-          <input
-            type="text"
-            name="brand"
-            value={productData.category}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter product category"
-          />
-        </div>
-        {/* <div>
           <label className="font-semibold">Product Category</label>
           <select
             name="category"
@@ -145,101 +167,59 @@ const ProductUpload = () => {
               </option>
             ))}
           </select>
-        </div> */}
-
-        <div>
-          <label className="font-semibold">Tag</label>
-          <input
-            type="text"
-            name="size"
-            value={productData.tag}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter product tag"
-          />
         </div>
 
         <div>
-          <label className="font-semibold">Collection</label>
-          <input
-            type="text"
-            name="size"
-            value={productData.collection}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter product collection"
-          />
-        </div>
-        <div>
-          <label className="font-semibold">Product Size</label>
-          <select
-            name="size"
-            value={productData.size}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          >
-            <option value="">Select size</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </select>
+          <label className="font-semibold">
+            Product Size (Multiple Select)
+          </label>
+          <div className="flex flex-wrap gap-4 mt-2">
+            {["XS", "S", "M", "L", "XL", "2X"].map((size) => (
+              <label key={size} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  value={size}
+                  checked={productData.size.includes(size)}
+                  onChange={handleSizeChange}
+                  className="form-checkbox"
+                />
+                <span>{size}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div>
-          <label className="font-semibold">Stock Count</label>
-          <input
-            type="number"
-            name="stock"
-            value={productData.stock}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter stock count"
-          />
-        </div>
+        {productData.size.length > 0 &&
+          productData.size.map((size) => (
+            <div key={size}>
+              <label className="font-semibold">Stock Count for {size}</label>
+              <input
+                type="number"
+                name="stock"
+                value={productData.stock[size] || ""}
+                onChange={(e) => handleStockChange(e, size)}
+                className="w-full px-4 py-2 border rounded"
+                placeholder={`Enter stock count for ${size}`}
+              />
+            </div>
+          ))}
+
         <div>
           <label className="font-semibold">Product Price</label>
           <input
             type="number"
             name="price"
             value={productData.price}
-            onChange={handleChange}
+            onChange={handlePriceChange}
             className="w-full px-4 py-2 border rounded"
             placeholder="Enter product price"
           />
         </div>
-        <div>
-          <label className="font-semibold">Offer Price</label>
-          <input
-            type="number"
-            name="offerPrice"
-            value={productData.offerPrice}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter offer price"
-          />
-        </div>
 
-        <div>
-          <label className="font-semibold">Product Rating (1-5)</label>
-          <input
-            type="number"
-            name="rating"
-            value={productData.rating}
-            onChange={handleChange}
-            min="1"
-            max="5"
-            step="0.1"
-            className="w-full px-4 py-2 border rounded"
-            placeholder="Enter product rating"
-          />
-        </div>
         <div>
           <label className="font-semibold">Offer Percentage</label>
           <input
-            type="text"
+            type="number"
             name="offerPercentage"
             value={productData.offerPercentage}
             onChange={handleChange}
@@ -249,65 +229,18 @@ const ProductUpload = () => {
         </div>
 
         <div>
-          <label className="font-semibold">Product Color (CMYK)</label>
-          <div className="flex items-baseline space-x-2">
-            <div>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  name="c"
-                  value={productData.cmykColor.c}
-                  onChange={handleCMYKChange}
-                  className="w-16 px-2 py-1 border rounded"
-                  placeholder="C"
-                  min="0"
-                  max="100"
-                />
-                <input
-                  type="number"
-                  name="m"
-                  value={productData.cmykColor.m}
-                  onChange={handleCMYKChange}
-                  className="w-16 px-2 py-1 border rounded"
-                  placeholder="M"
-                  min="0"
-                  max="100"
-                />
-                <input
-                  type="number"
-                  name="y"
-                  value={productData.cmykColor.y}
-                  onChange={handleCMYKChange}
-                  className="w-16 px-2 py-1 border rounded"
-                  placeholder="Y"
-                  min="0"
-                  max="100"
-                />
-                <input
-                  type="number"
-                  name="k"
-                  value={productData.cmykColor.k}
-                  onChange={handleCMYKChange}
-                  className="w-16 px-2 py-1 border rounded"
-                  placeholder="K"
-                  min="0"
-                  max="100"
-                />
-              </div>
-            </div>
-            <div className="grow">
-              <input
-                type="text"
-                value={productData.color}
-                readOnly
-                className="mt-2 w-full px-4 py-2 border rounded"
-                placeholder="Converted RGB Value"
-              />
-            </div>
-          </div>
+          <label className="font-semibold">Offer Price</label>
+          <input
+            type="text"
+            value={productData.offerPrice}
+            readOnly
+            className="w-full px-4 py-2 border rounded"
+            placeholder="Calculated offer price"
+          />
         </div>
+
         <div>
-          <label className="font-semibold">Product Photos(Multiple)</label>
+          <label className="font-semibold">Product Photos (Multiple)</label>
           <input
             type="file"
             name="photos"
@@ -328,6 +261,7 @@ const ProductUpload = () => {
           rows="3"
         />
       </div>
+
       {/* Buttons */}
       <div className="flex justify-between mt-4">
         <button
@@ -354,72 +288,44 @@ const ProductUpload = () => {
           <p>
             <strong>ID:</strong> {productData.id}
           </p>
-
           <p>
             <strong>Brand:</strong> {productData.brand}
-          </p>
-
-          <p>
-            <strong>Collection:</strong> {productData.collection}
-          </p>
-
-          <p>
-            <strong>Tag:</strong> {productData.tag}
           </p>
           <p>
             <strong>Category:</strong> {productData.category}
           </p>
-
           <p>
-            <strong>Stock:</strong> {productData.stock}
+            <strong>Size:</strong> {productData.size.join(", ")}
           </p>
-
+          {productData.size.length > 0 &&
+            productData.size.map((size) => (
+              <p key={size}>
+                <strong>Stock for {size}:</strong> {productData.stock[size]}
+              </p>
+            ))}
           <p>
             <strong>Price:</strong> Rs.{productData.price}
           </p>
           <p>
             <strong>Offer Price:</strong> Rs.{productData.offerPrice}
           </p>
-
           <p>
-            <strong>Rating:</strong> {productData.rating}
-          </p>
-
-          <p>
-            <strong>Offer Percentage</strong> {productData.offerPercentage}
-          </p>
-
-          <p>
-            <strong>Color:</strong>
-            <span
-              style={{
-                backgroundColor: productData.color,
-                padding: "5px 10px",
-                borderRadius: "5px",
-                color: "#fff",
-              }}
-            >
-              {productData.color}
-            </span>
+            <strong>Offer Percentage:</strong> {productData.offerPercentage}%
           </p>
           <p>
             <strong>Description:</strong> {productData.description}
           </p>
-          {imagePreview && imagePreview.length > 0 && (
-            <div>
-              <strong>Photos:</strong>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {imagePreview.map((src, index) => (
-                  <img
-                    key={index}
-                    src={src}
-                    alt={`Product Preview ${index + 1}`}
-                    className="w-32 h-32 object-cover"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <p>
+            <strong>Photos:</strong>{" "}
+            {imagePreview?.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`Preview ${index}`}
+                className="w-20 h-20 mr-2"
+              />
+            ))}
+          </p>
         </div>
       )}
     </div>
