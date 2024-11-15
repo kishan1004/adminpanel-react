@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { jsPDF } from "jspdf";
 
 const OrderReport = ({ orderId }) => {
@@ -35,7 +35,7 @@ const OrderReport = ({ orderId }) => {
     discount: 200,
   };
 
-  const [orderData, setOrderData] = useState(dummyData);
+  const orderData = dummyData;
 
   const calculateGrandTotal = () => {
     const totalPrice = orderData.items.reduce(
