@@ -62,7 +62,7 @@ const Settings = () => {
       <div className="mt-6">
         <button
           onClick={goToUserManagement}
-          className="px-6 py-2 bg-gray-600 text-white rounded-md shadow-md"
+          className="px-6 py-2 bg-gray-400 text-white rounded-md shadow-md"
         >
           Go to User Management
         </button>

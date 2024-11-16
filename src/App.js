@@ -18,6 +18,7 @@ import Login from "./components/Login";
 import OrderDetail from "./components/OrderDetail";
 import UserManagement from "./components/UserManagement";
 import OrderReport from "./components/OrderReport";
+import Inventory from "./components/Inventory";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -82,6 +83,7 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/user-management" element={<UserManagement />} />
                   <Route path="/report" element={<OrderReport />} />
+                  <Route path="/inventory" element={<Inventory />} />
                 </Routes>
               </div>
             </div>

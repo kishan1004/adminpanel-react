@@ -83,13 +83,21 @@ const Orders = () => {
   // Filtering states
   const [selectedPaymentStatus, setSelectedPaymentStatus] = useState("");
   const [selectedOrderStatus, setSelectedOrderStatus] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  // Function to filter orders based on payment and order status
+  // Function to filter orders based on payment, order status, and date range
   const filteredOrders = orderData.filter((order) => {
+    const orderDate = new Date(order.date);
+    const matchesDate =
+      (!startDate || orderDate >= new Date(startDate + "T00:00:00")) &&
+      (!endDate || orderDate <= new Date(endDate + "T23:59:59"));
+
     return (
       (!selectedPaymentStatus ||
         order.paymentStatus === selectedPaymentStatus) &&
-      (!selectedOrderStatus || order.orderStatus === selectedOrderStatus)
+      (!selectedOrderStatus || order.orderStatus === selectedOrderStatus) &&
+      matchesDate
     );
   });
 
@@ -147,6 +155,22 @@ const Orders = () => {
           <option value="In Transit">In Transit</option>
           <option value="Dispatch">Dispatch</option>
         </select>
+        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+          <label className="font-medium">From:</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="px-3 py-2 border rounded w-full md:w-auto"
+          />
+          <label className="font-medium">To:</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="px-3 py-2 border rounded w-full md:w-auto"
+          />
+        </div>
       </div>
 
       <div className="overflow-x-auto shadow-lg">

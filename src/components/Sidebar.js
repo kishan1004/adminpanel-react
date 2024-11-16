@@ -8,6 +8,7 @@ import {
   FaStar,
   FaCog,
 } from "react-icons/fa";
+import { MdInventory } from "react-icons/md";
 
 function Sidebar({ toggleSidebar }) {
   return (
@@ -89,6 +90,17 @@ function Sidebar({ toggleSidebar }) {
         onClick={toggleSidebar} // Close sidebar on link click
       >
         <FaBox className="mr-3" /> Report
+      </NavLink>
+      <NavLink
+        to="/inventory"
+        className={({ isActive }) =>
+          `flex items-center px-3 py-2 rounded ${
+            isActive ? "bg-black text-white" : "hover:bg-black hover:text-white"
+          }`
+        }
+        onClick={toggleSidebar} // Close sidebar on link click
+      >
+        <MdInventory className="mr-3" /> Inventory
       </NavLink>
     </aside>
   );
